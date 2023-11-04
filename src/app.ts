@@ -1,13 +1,15 @@
 import express from 'express';
 import 'express-async-errors';
+import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import authRoutes from './routes/auth';
 import bookRoutes from './routes/book';
 import booksRoutes from './routes/books';
 import { errorHandler } from './middlewares/errors';
+import config from './config';
 
-const PORT = 3002;
+dotenv.config();
 const app = express();
 app.use(bodyParser.json());
 
@@ -19,15 +21,15 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/', authRoutes);
+app.use('/auth', authRoutes);
 app.use('/book', bookRoutes);
 app.use('/books', booksRoutes);
 
 app.use(errorHandler);
 
-mongoose.connect('mongodb+srv://andriimaksymov:MqE6EOYKiGUsxjS3@cluster0.6rsixom.mongodb.net/books?retryWrites=true&w=majority')
+mongoose.connect(config.MONGO_URI)
   .then(() => {
-    app.listen(PORT);
+    app.listen(process.env.PORT);
   })
   .catch((err) => {
     console.log(err);

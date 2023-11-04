@@ -4,6 +4,7 @@ import { hash, compare } from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import BadRequestError, { HttpCode } from '../errors/BadRequestError';
 import User from '../models/user';
+import config from '../config';
 
 const postSignup = async (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);
@@ -12,7 +13,7 @@ const postSignup = async (req: Request, res: Response, next: NextFunction) => {
     throw new BadRequestError({
       code: HttpCode.BAD_REQUEST,
       message: 'Validation failed, entered data is incorrect.',
-      errors
+      errors: errors.array(),
     });
   }
 
@@ -42,7 +43,7 @@ const postLogin = async (req: Request, res: Response, next: NextFunction) => {
     throw new BadRequestError({
       code: HttpCode.BAD_REQUEST,
       message: 'Validation failed, entered data is incorrect.',
-      errors
+      errors: errors.array(),
     });
   }
 
@@ -55,14 +56,13 @@ const postLogin = async (req: Request, res: Response, next: NextFunction) => {
       const err = new BadRequestError({
         code: HttpCode.BAD_REQUEST,
         message: 'Email or password is not correct.',
-        errors
       });
       next(err);
     } else {
       const token = jwt.sign({
         email,
         role: user.role,
-      }, '4E1FA89E2F97C260D5BA24FDE9E7BB76F14BCD0E36E5F91B161182506EB20230', { expiresIn: '1h' });
+      }, config.JWT_SECRET, { expiresIn: '1h' });
       res.status(HttpCode.OK).json({ token, userId: user._id.toString() });
     }
   } catch (err) {

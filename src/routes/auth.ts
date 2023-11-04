@@ -14,13 +14,14 @@ router.post('/signup', upload.none(), [
       }
     });
   }),
-  body('password').trim().isLength({ min: 8, max: 100 }),
-  body('name').trim().isLength({ min: 2, max: 255 }),
+  body('password').trim().isLength({ min: 8, max: 100 }).withMessage('Password must be at least 8 chars long'),
+  body('name').trim().isLength({ min: 2, max: 255 }).withMessage('Password must be at least 2 chars long'),
+  body('role').trim().isIn(['user', 'admin']).withMessage('Invalid user role'),
 ], authController.postSignup);
 
 router.post('/login', upload.none(), [
   body('email').isEmail().withMessage('Please enter a valid email.'),
-  body('password').trim().isLength({ min: 8, max: 100 }),
+  body('password').trim().isLength({ min: 8, max: 100 }).withMessage('Password must be at least 8 chars long'),
 ], authController.postLogin)
 
 export default router;

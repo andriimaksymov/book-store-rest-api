@@ -35,7 +35,12 @@ const bookSchema = new Schema(
     },
     public: {
       type: Boolean,
-      default: false,
+      default: true,
+    },
+    status: {
+      type: String,
+      enum: ['in_stock', 'limited', 'not_available'],
+      default: 'in_stock',
     },
     creator: {
       type: Object,
@@ -46,4 +51,4 @@ const bookSchema = new Schema(
   }
 );
 
-export = model('Book', bookSchema);
+export default model('Book', bookSchema);

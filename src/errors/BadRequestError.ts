@@ -25,12 +25,12 @@ export default class BadRequestError extends CustomError {
     this._logging = logging || false;
     this._errors = params?.errors || undefined;
 
-    // Only because we are extending a built in class
+    // Only because we are extending a built-in class
     Object.setPrototypeOf(this, BadRequestError.prototype);
   }
 
   get errors() {
-    return [{ message: this.message, ...(this._errors && { details: this._errors.errors }) }];
+    return [{ message: this.message, ...(this._errors && { details: this._errors }) }];
   }
 
   get statusCode() {
