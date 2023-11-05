@@ -1,8 +1,8 @@
-import express from 'express';
+import { Router } from 'express';
 import booksController from '../controllers/books';
 
-const router = express.Router();
+const router = Router();
 
 router.get('/', booksController.getBooks);
 
-export = router;
+export default router;

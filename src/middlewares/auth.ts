@@ -8,17 +8,16 @@ export interface CustomRequest extends Request {
 }
 
 const auth = (req: Request, res: Response, next: NextFunction) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
+
+  if (!token) {
+    throw new BadRequestError({
+      code: HttpCode.UNAUTHORIZED,
+      message: 'Not authenticated!'
+    });
+  }
+
   try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-
-    if (!token) {
-      const err = new BadRequestError({
-        code: HttpCode.UNAUTHORIZED,
-        message: 'Not authenticated!'
-      });
-      return next(err);
-    }
-
     (req as CustomRequest).token = jwt.verify(token, config.JWT_SECRET);
 
     next();
