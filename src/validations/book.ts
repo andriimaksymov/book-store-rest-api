@@ -2,8 +2,8 @@ import { body } from 'express-validator';
 import Genre from '../models/genre';
 
 export const bookValidation = [
-  body('title').trim().isLength({ min: 4 }),
-  body('author').trim().exists().isLength({ min: 2 }),
+  body('title').trim().isLength({ min: 4 }).withMessage('Title must be at least 4 chars long'),
+  body('author').trim().isLength({ min: 2 }).withMessage('Title must be at least 2 chars long'),
   body('genre').trim().custom(async (id) => {
     try {
       const genre = await Genre.findById(id);
@@ -14,6 +14,6 @@ export const bookValidation = [
       return Promise.reject('Please use correct genre id');
     }
   }),
-  body('language').trim().exists().isLength({ min: 2 }),
-  body('description').trim().isLength({ min: 40 }),
+  body('language').trim().isLength({ min: 2 }).withMessage('Title must be at least 2 chars long'),
+  body('description').trim().isLength({ min: 40 }).withMessage('Title must be at least 40 chars long'),
 ]

@@ -10,11 +10,11 @@ const bookSchema = new Schema(
       type: String,
       required: true,
     },
-    genre: [{
+    genre: {
       type: Schema.Types.ObjectId,
       ref: 'Genre',
       required: true,
-    }],
+    },
     language: {
       type: String,
       required: true,
@@ -43,10 +43,6 @@ const bookSchema = new Schema(
       enum: ['in_stock', 'limited', 'not_available'],
       default: 'in_stock',
     },
-    creator: [{
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-    }],
   },
   {
     timestamps: true

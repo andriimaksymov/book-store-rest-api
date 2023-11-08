@@ -2,7 +2,9 @@ import { NextFunction, Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import { hash, compare } from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+
 import BadRequestError, { HttpCode } from '../errors/BadRequestError';
+import { IJWTPayloadData } from '../types/auth';
 import User from '../models/user';
 import config from '../config';
 
@@ -18,12 +20,11 @@ const postSignup = async (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    const { email, name, role } = req.body;
-    const hashedPassword = await hash(req.body.password, 12);
+    const { email, password } = req.body;
+    const hashedPassword = await hash(password, 12);
     const user = await new User({
-      name,
       email,
-      role,
+      role: 'user',
       password: hashedPassword
     });
     await user.save();
@@ -31,7 +32,7 @@ const postSignup = async (req: Request, res: Response, next: NextFunction) => {
       message: 'User successfully created!',
       id: user._id,
     });
-  } catch (err: unknown) {
+  } catch (err) {
     next(err);
   }
 };
@@ -49,7 +50,7 @@ const postLogin = async (req: Request, res: Response, next: NextFunction) => {
 
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select("+password");
     const isPasswordCorrect = user ? await compare(password, user.password) : false;
 
     if (!user || !isPasswordCorrect) {
@@ -61,8 +62,9 @@ const postLogin = async (req: Request, res: Response, next: NextFunction) => {
     } else {
       const token = jwt.sign({
         email,
+        userId: user._id,
         role: user.role,
-      }, config.JWT_SECRET, { expiresIn: '1h' });
+      } as IJWTPayloadData, config.JWT_SECRET, { expiresIn: '7d' });
       res.status(HttpCode.OK).json({ token, userId: user._id.toString() });
     }
   } catch (err) {

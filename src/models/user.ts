@@ -13,19 +13,35 @@ const userSchema = new Schema({
     required: true,
     min: 8,
     max: 100,
+    select: false,
   },
-  name: {
+  first_name: {
     type: String,
+    min: 2,
+  },
+  last_name: {
+    type: String,
+    min: 2,
+  },
+  nickname: {
+    type: String,
+    min: 2,
+  },
+  phone: {
+    type: String,
+    min: 2,
   },
   role: {
     type: String,
     enum: ['user', 'admin'],
     default: 'user',
   },
-  books: [{
+  favorites: [{
     type: Schema.Types.ObjectId,
     ref: 'Book',
   }]
+}, {
+  timestamps: true,
 })
 
 export default model('User', userSchema);

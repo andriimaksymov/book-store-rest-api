@@ -3,12 +3,12 @@ import { body } from 'express-validator';
 import genreController from '../controllers/genre';
 import upload from '../middlewares/upload';
 import Genre from '../models/genre';
-import auth from '../middlewares/auth';
+import authAndAdmin from '../middlewares/authAndAdmin';
 
 const router = Router();
 
 router.get('/', genreController.getGenres);
-router.post('/', auth, upload.none(), [
+router.post('/', authAndAdmin, upload.none(), [
   body('title')
     .exists().withMessage('Please enter a title')
     .isLength({ min: 2, max: 100 }).withMessage('Title must be at least 2 chars long')
@@ -30,7 +30,7 @@ router.post('/', auth, upload.none(), [
       })
     }),
 ], genreController.postGenre);
-router.put('/:id', auth, upload.none(), [
+router.put('/:id', authAndAdmin, upload.none(), [
   body('title')
     .exists().withMessage('Please enter a title')
     .isLength({ min: 2, max: 100 }).withMessage('Title must be at least 2 chars long'),

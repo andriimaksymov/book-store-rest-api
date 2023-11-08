@@ -1,6 +1,6 @@
 export type CustomErrorContent = {
   message: string,
-  context?: { [key: string]: any }
+  details?: { [key: string]: any }
 };
 
 export abstract class CustomError extends Error {
