@@ -3,7 +3,23 @@ import { validationResult } from 'express-validator';
 
 import BadRequestError, { HttpCode } from '../errors/BadRequestError';
 import IncorrectIdError from '../errors/IncorrectIdError';
-import Book from '../models/book';
+import Book from '../models/book.model';
+
+const getBooks = async (req: Request, res: Response, next: NextFunction) => {
+  const { page = 1, limit = 10 } = req.query;
+  try {
+    const books = await Book.find().limit(+limit).skip((+page - 1) * +limit).sort({ createdAt: -1 });
+    const total = await Book.countDocuments();
+    res.status(200).json({
+      items: books,
+      total,
+      limit,
+      page,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 const getBook = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
@@ -95,4 +111,4 @@ const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export default { getBook, postBook, updateBook, deleteBook };
+export default { getBooks, getBook, postBook, updateBook, deleteBook };

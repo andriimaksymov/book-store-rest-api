@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
-import genreController from '../controllers/genre';
+import genreController from '../controllers/genres.controller';
 import upload from '../middlewares/upload';
-import Genre from '../models/genre';
+import Genre from '../models/genre.model';
 import authAndAdmin from '../middlewares/authAndAdmin';
 
 const router = Router();

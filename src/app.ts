@@ -5,11 +5,10 @@ import mongoose from 'mongoose';
 import 'express-async-errors';
 
 import { errorHandler } from './middlewares/errors';
-import authRoutes from './routes/auth';
-import bookRoutes from './routes/book';
-import booksRoutes from './routes/books';
-import genreRoutes from './routes/genre';
-import userRoutes from './routes/user';
+import authRoutes from './routes/auth.routes';
+import booksRoutes from './routes/books.routes';
+import genresRoutes from './routes/genres.routes';
+import usersRoutes from './routes/users.routes';
 import config from './config';
 
 dotenv.config();
@@ -25,10 +24,9 @@ app.use((req, res, next) => {
 });
 
 app.use('/auth', authRoutes);
-app.use('/book', bookRoutes);
 app.use('/books', booksRoutes);
-app.use('/genre', genreRoutes);
-app.use('/user', userRoutes);
+app.use('/genres', genresRoutes);
+app.use('/users', usersRoutes);
 
 app.use(errorHandler);
 

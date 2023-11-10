@@ -23,13 +23,8 @@ const userSchema = new Schema({
     type: String,
     min: 2,
   },
-  nickname: {
-    type: String,
-    min: 2,
-  },
   phone: {
     type: String,
-    min: 2,
   },
   role: {
     type: String,

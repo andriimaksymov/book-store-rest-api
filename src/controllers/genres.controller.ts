@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { validationResult } from 'express-validator';
-import Genre from '../models/genre';
+import Genre from '../models/genre.model';
 import BadRequestError, { HttpCode } from '../errors/BadRequestError';
 import IncorrectIdError from '../errors/IncorrectIdError';
 
@@ -61,7 +61,7 @@ const updateGenre = async (req: Request, res: Response, next: NextFunction) => {
     await Genre.findByIdAndUpdate(id, req.body);
     const genre = await Genre.findById(id);
     res.status(201).json(genre);
-  } catch (err: unknown) {
+  } catch (err) {
     next(err);
   }
 }

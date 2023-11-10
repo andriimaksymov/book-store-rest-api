@@ -2,7 +2,23 @@ import { NextFunction, Request, Response } from 'express';
 
 import IncorrectIdError from '../errors/IncorrectIdError';
 import BadRequestError, { HttpCode } from '../errors/BadRequestError';
-import User from '../models/user';
+import User from '../models/user.model';
+
+const getUsers = async (req: Request, res: Response, next: NextFunction) => {
+  const { page = 1, limit = 10 } = req.query;
+  try {
+    const users = await User.find().limit(+limit).skip((+page - 1) * +limit).sort({ createdAt: -1 });
+    const total = await User.countDocuments();
+    res.status(200).json({
+      items: users,
+      total,
+      limit,
+      page,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
 
 const getUser = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
@@ -25,4 +41,4 @@ const getUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export default { getUser };
+export default { getUser, getUsers };

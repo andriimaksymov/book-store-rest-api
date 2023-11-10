@@ -1,5 +1,5 @@
 import { body } from 'express-validator';
-import Genre from '../models/genre';
+import Genre from '../models/genre.model';
 
 export const bookValidation = [
   body('title').trim().isLength({ min: 4 }).withMessage('Title must be at least 4 chars long'),

@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 
 import BadRequestError, { HttpCode } from '../errors/BadRequestError';
 import { IJWTPayloadData } from '../types/auth';
-import User from '../models/user';
+import User from '../models/user.model';
 import config from '../config';
 
 const postSignup = async (req: Request, res: Response, next: NextFunction) => {
