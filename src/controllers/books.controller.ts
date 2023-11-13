@@ -30,8 +30,7 @@ const getBook = async (req: Request, res: Response, next: NextFunction) => {
     const book = await Book.findById(id);
     if (book) {
       return res.status(HttpCode.OK).json(book);
-    }
-    else {
+    } else {
       return res.status(HttpCode.NOT_FOUND).json({
         message: "Book you are looking for does not exist"
       })
@@ -80,10 +79,19 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    await Book.findByIdAndUpdate(id, req.body);
-    const book = await Book.findById(id);
-    res.status(HttpCode.OK).json(book);
-  } catch (err: unknown) {
+    const book = await Book.findByIdAndUpdate(id, req.body, {
+      returnOriginal: false,
+    });
+    if (!book) {
+      const err = new BadRequestError({
+        code: HttpCode.NOT_FOUND,
+        message: 'Book doesn\'t exist',
+      });
+      next(err);
+    } else {
+      res.status(HttpCode.OK).json(book);
+    }
+  } catch (err) {
     next(err);
   }
 };
@@ -102,8 +110,10 @@ const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
       });
       next(err);
     } else {
+      await book.deleteOne();
       return res.status(HttpCode.OK).json({
-        message: 'Book was successfully deleted!'
+        id,
+        message: 'Book was successfully deleted!',
       });
     }
   } catch (err) {
