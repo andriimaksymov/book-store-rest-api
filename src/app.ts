@@ -9,6 +9,7 @@ import authRoutes from './routes/auth.routes';
 import booksRoutes from './routes/books.routes';
 import cartRoutes from './routes/cart.routes';
 import genresRoutes from './routes/genres.routes';
+import ordersRoutes from './routes/orders.routes';
 import usersRoutes from './routes/users.routes';
 import config from './config';
 
@@ -28,6 +29,7 @@ app.use('/auth', authRoutes);
 app.use('/books', booksRoutes);
 app.use('/cart', cartRoutes);
 app.use('/genres', genresRoutes);
+app.use('/orders', ordersRoutes);
 app.use('/users', usersRoutes);
 
 app.use(errorHandler);

@@ -56,6 +56,9 @@ const postBook = async (req: Request, res: Response, next: NextFunction) => {
     const book = new Book({
       ...req.body,
       image: imageUrl,
+      ...(req.body.genres && {
+        genres: [...new Set(req.body.genres)]
+      }),
     });
     await book.save();
     res.status(HttpCode.OK_CREATED).json(book);
@@ -79,7 +82,13 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    const book = await Book.findByIdAndUpdate(id, req.body, {
+    const data = {
+      ...req.body,
+      ...(req.body.genres && {
+        genres: [...new Set(req.body.genres)]
+      }),
+    }
+    const book = await Book.findByIdAndUpdate(id, data, {
       returnOriginal: false,
     });
     if (!book) {

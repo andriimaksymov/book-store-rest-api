@@ -13,6 +13,7 @@ const genreSchema = new Schema({
   }
 }, {
   timestamps: true,
+  versionKey: false,
 });
 
 export default model('Genre', genreSchema);

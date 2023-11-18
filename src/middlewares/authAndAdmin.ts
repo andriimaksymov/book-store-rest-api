@@ -5,8 +5,9 @@ import { IJWTPayloadData } from '../types/auth';
 import BadRequestError, { HttpCode } from '../errors/BadRequestError';
 import config from '../config';
 import { CustomRequest } from './auth';
+import UserModel from '../models/user.model';
 
-const authAndAdmin = (req: Request, res: Response, next: NextFunction) => {
+const authAndAdmin = async (req: Request, res: Response, next: NextFunction) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
 
   if (!token) {
@@ -19,11 +20,16 @@ const authAndAdmin = (req: Request, res: Response, next: NextFunction) => {
   const data = jwt.verify(token, config.JWT_SECRET);
   const tokenData = data as IJWTPayloadData;
 
-  if (tokenData.role !== 'admin') {
-    res.status(HttpCode.FORBIDDEN).send('Forbidden');
-  } else {
-    (req as CustomRequest).token = jwt.verify(token, config.JWT_SECRET);
-    next();
+  try {
+    const user = await UserModel.findById(tokenData.userId);
+    if (user && user.role === 'admin') {
+      (req as CustomRequest).token = jwt.verify(token, config.JWT_SECRET);
+      next();
+    } else {
+      res.status(HttpCode.FORBIDDEN).send('Forbidden');
+    }
+  } catch (err) {
+    next(err);
   }
 };
 

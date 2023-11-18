@@ -10,11 +10,11 @@ const bookSchema = new Schema(
       type: String,
       required: true,
     },
-    genre: {
+    genres: [{
       type: Schema.Types.ObjectId,
       ref: 'Genre',
       required: true,
-    },
+    }],
     language: {
       type: String,
       required: true,
@@ -27,10 +27,10 @@ const bookSchema = new Schema(
       type: String,
     },
     year: {
-      type: Number,
+      type: String,
     },
     pages: {
-      type: Number,
+      type: String,
     },
     image: {
       type: String,
@@ -46,7 +46,8 @@ const bookSchema = new Schema(
     },
   },
   {
-    timestamps: true
+    timestamps: true,
+    versionKey: false,
   }
 );
 

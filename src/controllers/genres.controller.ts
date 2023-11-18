@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { validationResult } from 'express-validator';
+
 import Genre from '../models/genre.model';
 import BadRequestError, { HttpCode } from '../errors/BadRequestError';
 import IncorrectIdError from '../errors/IncorrectIdError';

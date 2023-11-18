@@ -19,7 +19,6 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
 
   try {
     (req as CustomRequest).token = jwt.verify(token, config.JWT_SECRET);
-
     next();
   } catch (err) {
     next(err);
