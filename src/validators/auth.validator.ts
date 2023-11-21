@@ -3,6 +3,7 @@ import { body } from 'express-validator';
 import User from '../models/user.model';
 
 export const signupValidator = [
+  body('first_name', 'The minimum first name length is 2 characters').trim().isLength({ min: 2 }),
   body('email').trim().isEmail().withMessage('Please enter a valid email').custom((value) => {
     return User.findOne({ email: value }).then((user) => {
       if (user) {

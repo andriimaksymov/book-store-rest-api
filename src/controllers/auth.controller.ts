@@ -20,12 +20,13 @@ const postSignup = async (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    const { email, password } = req.body;
+    const { first_name, email, password } = req.body;
     const hashedPassword = await hash(password, 12);
     const user = await new User({
       email,
+      first_name,
+      password: hashedPassword,
       role: 'user',
-      password: hashedPassword
     });
     await user.save();
     res.status(HttpCode.OK_CREATED).json({
@@ -65,7 +66,7 @@ const postLogin = async (req: Request, res: Response, next: NextFunction) => {
         userId: user._id,
         role: user.role,
       } as IJWTPayloadData, config.JWT_SECRET, { expiresIn: '7d' });
-      res.status(HttpCode.OK).json({ token, userId: user._id.toString() });
+      return res.status(HttpCode.OK).json({ token, userId: user._id.toString() });
     }
   } catch (err) {
     next(err);
