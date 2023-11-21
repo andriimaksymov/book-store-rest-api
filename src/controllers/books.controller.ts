@@ -57,7 +57,8 @@ const postBook = async (req: Request, res: Response, next: NextFunction) => {
       ...req.body,
       image: imageUrl,
       ...(req.body.genres && {
-        genres: [...new Set(req.body.genres)]
+        genres: req.body.genres,
+        // genres: [...new Set(req.body.genres)]
       }),
     });
     await book.save();
@@ -85,7 +86,8 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
     const data = {
       ...req.body,
       ...(req.body.genres && {
-        genres: [...new Set(req.body.genres)]
+        genres: req.body.genres,
+        // genres: [...new Set(req.body.genres)]
       }),
     }
     const book = await Book.findByIdAndUpdate(id, data, {

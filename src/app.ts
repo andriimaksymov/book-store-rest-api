@@ -31,8 +31,8 @@ app.use(morgan('combined', { stream: accessLogStream }));
 
 app.use(express.static('images'));
 
-const privateKey = fs.readFileSync('server.key');
-const certificate = fs.readFileSync('server.cert');
+// const privateKey = fs.readFileSync('server.key');
+// const certificate = fs.readFileSync('server.cert');
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
