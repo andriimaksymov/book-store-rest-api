@@ -35,9 +35,9 @@ app.use(express.static('images'));
 // const certificate = fs.readFileSync('server.cert');
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Header', 'Content-Type, Authorization');
-  next();
+	res.setHeader('Access-Control-Allow-Origin', '*');
+	res.setHeader('Access-Control-Allow-Header', 'Content-Type, Authorization');
+	next();
 });
 
 app.use('/auth', authRoutes);
@@ -49,14 +49,15 @@ app.use('/users', usersRoutes);
 
 app.use(errorHandler);
 
-mongoose.connect(config.MONGO_URI)
-  .then(() => {
-    // https.createServer({
-    //   key: privateKey,
-    //   cert: certificate,
-    // }, app).listen(process.env.PORT);
-    app.listen(process.env.PORT);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+mongoose
+	.connect(config.MONGO_URI)
+	.then(() => {
+		// https.createServer({
+		//   key: privateKey,
+		//   cert: certificate,
+		// }, app).listen(process.env.PORT);
+		app.listen(process.env.PORT);
+	})
+	.catch((err) => {
+		console.log(err);
+	});

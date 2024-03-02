@@ -1,11 +1,7 @@
 import { Router } from 'express';
 
 import authController from '../controllers/auth.controller';
-import {
-  forgotPasswordValidator,
-  loginValidator,
-  signupValidator
-} from '../validators/auth.validator';
+import { forgotPasswordValidator, loginValidator, signupValidator } from '../validators/auth.validator';
 import upload from '../middlewares/upload';
 
 const router = Router();

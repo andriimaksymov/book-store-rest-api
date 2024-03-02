@@ -13,16 +13,22 @@ const router = Router();
 router.get('/', auth, userController.getUsers);
 router.post('/', authAndAdmin, userController.postUser);
 router.get('/:id', auth, userController.getUser);
-router.post('/:id/favorites', auth, upload.none(), [
-  body('bookId')
-    .trim()
-    .custom(async (id) => {
-      return Book.findOne({ _id: id }).then((book) => {
-        if (!book) {
-          return Promise.reject('Incorrect book id');
-        }
-      });
-    })
-], userController.postFavorites);
+router.post(
+	'/:id/favorites',
+	auth,
+	upload.none(),
+	[
+		body('bookId')
+			.trim()
+			.custom(async (id) => {
+				return Book.findOne({ _id: id }).then((book) => {
+					if (!book) {
+						return Promise.reject('Incorrect book id');
+					}
+				});
+			}),
+	],
+	userController.postFavorites,
+);
 
 export default router;

@@ -3,15 +3,19 @@ import { body } from 'express-validator';
 import User from '../models/user.model';
 
 export const signupValidator = [
-  body('first_name', 'The minimum first name length is 2 characters').trim().isLength({ min: 2 }),
-  body('email').trim().isEmail().withMessage('Please enter a valid email').custom((value) => {
-    return User.findOne({ email: value }).then((user) => {
-      if (user) {
-        return Promise.reject('User already exists. Please sign in');
-      }
-    });
-  }),
-  body('password', 'The minimum password length is 8 characters').trim().isLength({ min: 8 }),
+	body('first_name', 'The minimum first name length is 2 characters').trim().isLength({ min: 2 }),
+	body('email')
+		.trim()
+		.isEmail()
+		.withMessage('Please enter a valid email')
+		.custom((value) => {
+			return User.findOne({ email: value }).then((user) => {
+				if (user) {
+					return Promise.reject('User already exists. Please sign in');
+				}
+			});
+		}),
+	body('password', 'The minimum password length is 8 characters').trim().isLength({ min: 8 }),
 ];
 
 export const loginValidator = [
@@ -19,6 +23,4 @@ export const loginValidator = [
   body('password', 'The minimum password length is 8 characters').trim().isLength({ min: 8 }),
 ];
 
-export const forgotPasswordValidator = [
-  body('email', 'Please enter a valid email').isEmail(),
-];
+export const forgotPasswordValidator = [body('email', 'Please enter a valid email').isEmail()];
