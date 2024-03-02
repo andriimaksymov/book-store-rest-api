@@ -18,3 +18,7 @@ export const loginValidator = [
   body('email', 'Please enter a valid email').isEmail(),
   body('password', 'The minimum password length is 8 characters').trim().isLength({ min: 8 }),
 ];
+
+export const forgotPasswordValidator = [
+  body('email', 'Please enter a valid email').isEmail(),
+];
